@@ -56,3 +56,5 @@ what's the pattern - the post is about fields for the @post object and the udate
 Bonus: Are we updating the entire post or only the fields the change?
 
 in the event you only edit the title, does the post content get updated if we are always assigning all fields? dirty_attributes like content_changed? internalized in the sql for save/update (is that true?)
+
+<a href='https://learn.co/lessons/rails-edit-update-action-readme' data-visibility='hidden'>View this lesson on Learn.co</a>
