@@ -23,7 +23,7 @@ To start off, let's draw a `get` route for our edit form, since the form will ne
 get '/post/:id/edit', to: 'posts#edit'
 ```
 
-We still need to draw one additional route to handle the `update` action, this route will also need to be dynamic and accept an `:id` as a parameter so the `update` action will know what record is being altered:
+We still need to draw one additional route to handle the `update` action, this route will also need to be dynamic and accept an `:id` as a parameter so the `update` action will know what record is being altered. If you're curious on what HTTP verb should be selected, consider that we're sending data to the server, so we know it's not `GET`, and since we're not creating a new record it shouldn't be `POST`, so `PUT` should be the HTTP verb.
 
 ```ruby
 put 'post/:id', to: 'posts#update'
@@ -47,9 +47,9 @@ def update
 end
 ```
 
-And then create the edit view template `touch app/views/posts/edit.html.erb`
+And then create the edit view template `app/views/posts/edit.html.erb`
 
-In the future we will call the form partial to integrate the form, but for this lesson let's just copy and paste the form code from the `new` form:
+Let's just copy and paste the form code from the `new` form:
 
 ```ERB
 <h3>Post Form</h3>
@@ -80,14 +80,20 @@ Now that the `edit` view template will have access to the `@post` object, we nee
 ```ERB
 <% # app/views/posts/edit.html.erb %>
 
-...
-<%= text_field_tag :title, @post.title %><br>
-...
-<%= text_area_tag :description, @post.description %><br>
-...
+<h3>Post Form</h3>
+
+<%= form_for(@post) do |f| %>
+  <label>Post title:</label><br>
+  <%= f.text_field :title %><br>
+
+  <label>Post Description</label><br>
+  <%= f.text_area :description %><br>
+  
+  <%= f.submit %>
+<% end %>
 ```
 
-This will now populate the form, but if you tried to submit the form you may notice that it's redirecting to the show page and not changing the values. We need to first make a change to the form so that it knows what route the data should be passed through as well as what HTTP verb needs to be called, make the following change to the `form_tag` line:
+This will now populate the form, but if you tried to submit the form you may notice that it's redirecting to the show page and not changing the values. Notice how the `post_path` route helper method is used for the `show`, `update`, `edit`, and `delete` method? How can we let the app know that we want to use the `update` method in this case? We need to first make a change to the form so that it knows what route the data should be passed through as well as what HTTP verb needs to be called, make the following change to the `form_tag` line:
 
 ```ERB
 <%= form_tag post_path(@post), method: "put" do %>
@@ -101,6 +107,8 @@ def update
 end
 ```
 
+The `raise` method will cause the application to pause and print out the `params`, you could also see the `params` if you called `puts params.inspect`, using `puts` would simply require you to track down the data in the rails server session.
+
 If you open up the browser and navigate to an edit page, such as: `localhost:3000/post/5/edit` and change some elements in and form and submit it, it should take you to an error page that prints out the params from the form, such as the below image:
 
 ![Raised Exception for Update Action](http://reif.io/lib/flatiron/update_raised_exception.png)
@@ -111,7 +119,7 @@ As you can see, the parameters are being passed to the update action, with that 
 
 * Store the query in an instance variable
 
-* Update the values passed from the form
+* Update the values passed from the form (the update method here is the `update` method supplied from `ActiveRecord`, not the `update` method we're creating). **The update method takes a hash of the attributes for the model as its argument, e.g. `Post.find(1).update(title: "I'm Changed", description: "And here too!")**
 
 * Save the changes in the database
 
@@ -133,10 +141,12 @@ Now if we run this in the browser we'll get the following error: `ActiveModel::F
 ```ruby
 def update
   @post = Post.find(params[:id])
-  @post.update(params.permit(:title, :description))
+  @post.update(params)
   redirect_to post_path(@post)
 end
 ```
+
+**Note, you will need to disable strong params for this to work if you're following along, you can do this by adding this line `config.action_controller.permit_all_parameters = true` in the `config/application.rb` file. We'll gett into strong parameters in a later lesson.**
 
 Now if you go to the edit page and make changes to the `title` or `description` form elements you will see they are changed when the form is submitted, so the `edit` and `update` functions are working properly!
 
