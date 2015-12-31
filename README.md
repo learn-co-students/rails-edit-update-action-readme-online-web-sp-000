@@ -133,16 +133,6 @@ We'll take advantage of the `update` method so that we're not manually assigning
 ```ruby
 def update
   @post = Post.find(params[:id])
-  @post.update(params)
-  redirect_to post_path(@post)
-end
-```
-
-Now if we run this in the browser we'll get the following error: `ActiveModel::ForbiddenAttributesError in PostsController#update`. So what's going on here? In Rails 4+, Rails forces you to whitelist the attributes that are sent in the form and added to the database, this is to prevent hackers from submitting malicious form parameter values. This error is easily fixed by adding in the parameters we want whitelisted into the `update` method:
-
-```ruby
-def update
-  @post = Post.find(params[:id])
   @post.update(title: params[:title], description: params[:description])
   redirect_to post_path(@post)
 end
