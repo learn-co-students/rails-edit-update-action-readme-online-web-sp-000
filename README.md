@@ -86,10 +86,10 @@ Now that the `edit` view template will have access to the `@post` object, we nee
 
 <%= form_tag post_path(@post), method: "put" do %>
   <label>Post title:</label><br>
-  <%= text_field_tag :title, value: @post.title %><br>
+  <%= text_field_tag :title, @post.title %><br>
 
   <label>Post Description</label><br>
-  <%= text_area_tag :description, value: @post.description %><br>
+  <%= text_area_tag :description, @post.description %><br>
 
   <%= submit_tag "Submit Post" %>
 <% end %>
@@ -109,11 +109,11 @@ def update
 end
 ```
 
-The `raise` method will cause the application to pause and print out the `params`, you could also see the `params` if you called `puts params.inspect`, using `puts` would simply require you to track down the data in the rails server log.
+The `raise` method will cause the application to pause and print out the `params` on an error page, you could also see the `params` if you called `puts params.inspect`, using `puts` would simply require you to track down the data in the rails server log.
 
 If you open up the browser and navigate to an edit page, such as: `localhost:3000/post/5/edit` and change some elements in and form and submit it, it should take you to an error page that prints out the params from the form, such as the below image:
 
-![Raised Exception for Update Action](http://reif.io/lib/flatiron/update_raised_exception.png)
+![Raised Exception for Update Action](https://s3.amazonaws.com/flatiron-bucket/readme-lessons/update_raised_exception.png)
 
 As you can see, the parameters are being passed to the update action, with that in mind let's implement the functionality needed inside of the `update` action so that it will take the form data and update the specified record. Let's write some pseudo code for what the `update` action should do:
 
@@ -143,12 +143,10 @@ Now if we run this in the browser we'll get the following error: `ActiveModel::F
 ```ruby
 def update
   @post = Post.find(params[:id])
-  @post.update(params)
+  @post.update(title: params[:title], description: params[:description])
   redirect_to post_path(@post)
 end
 ```
-
-**Note, you will need to disable strong params for this to work if you're following along, you can do this by adding this line `config.action_controller.permit_all_parameters = true` in the `config/application.rb` file. We'll gett into strong parameters in a later lesson.**
 
 Now if you go to the edit page and make changes to the `title` or `description` form elements you will see they are changed when the form is submitted, so the `edit` and `update` functions are working properly!
 
