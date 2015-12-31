@@ -29,6 +29,8 @@ We still need to draw one additional route to handle the `update` action, this r
 put 'post/:id', to: 'posts#update'
 ```
 
+On a side note, as a shortcut you could also simply add the `edit` and `update` actions to the `resources` call in the routes file and that would accomplish the same goal that these two lines do.
+
 If you run `rake routes` you will see we have two new routes:
 
 ```
@@ -82,14 +84,14 @@ Now that the `edit` view template will have access to the `@post` object, we nee
 
 <h3>Post Form</h3>
 
-<%= form_for(@post) do |f| %>
+<%= form_tag post_path(@post), method: "put" do %>
   <label>Post title:</label><br>
-  <%= f.text_field :title %><br>
+  <%= text_field_tag :title, value: @post.title %><br>
 
   <label>Post Description</label><br>
-  <%= f.text_area :description %><br>
-  
-  <%= f.submit %>
+  <%= text_area_tag :description, value: @post.description %><br>
+
+  <%= submit_tag "Submit Post" %>
 <% end %>
 ```
 
@@ -107,7 +109,7 @@ def update
 end
 ```
 
-The `raise` method will cause the application to pause and print out the `params`, you could also see the `params` if you called `puts params.inspect`, using `puts` would simply require you to track down the data in the rails server session.
+The `raise` method will cause the application to pause and print out the `params`, you could also see the `params` if you called `puts params.inspect`, using `puts` would simply require you to track down the data in the rails server log.
 
 If you open up the browser and navigate to an edit page, such as: `localhost:3000/post/5/edit` and change some elements in and form and submit it, it should take you to an error page that prints out the params from the form, such as the below image:
 
