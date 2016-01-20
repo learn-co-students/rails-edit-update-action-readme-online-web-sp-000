@@ -2,11 +2,11 @@
 
 ## Rails Controller Conventions
 
-Now that you know how to implement a create action the next logical step will be to integrate an edit/update action. As you may have noticed, there is a trend in Rails conventions where the logic for rendering a form is separate from the action that the manages the database record alteration. For example:
+Now that you know how to implement a create action, the next logical step will be to integrate an edit/update action. As you may have noticed, there is a trend in Rails conventions where the logic for rendering a form is separate from the action that manages the database record alteration. For example:
 
-* The `new` action in the controller simply rendering the `new` form
+* The `new` action in the controller simply renders the `new` form
 
-* The `create` action is what actually handled the process for inserting the form data into the database
+* The `create` action is what actually handles the process of inserting the form data into the database
 
 In like fashion, the `edit` and `update` actions have a similar convention:
 
@@ -69,7 +69,7 @@ Let's just copy and paste the form code from the `new` form:
 <% end %>
 ```
 
-If you open the browser and go to the `edit` page it will now display the form, but you may have noticed a pretty big flaw, it doesn't load the record's data into the form, there are a few tasks that we'll need to do in order to implement this behavior, first let's have our `edit` action store the `post` record in an instance variable:
+If you open the browser and go to the `edit` page it will now display the form, but you may have noticed a pretty big flaw, it doesn't load the record's data into the form, there are a few tasks that we'll need to do in order to implement this behavior. First let's have our `edit` action store the `post` record in an instance variable:
 
 ```ruby
 def edit
@@ -77,7 +77,7 @@ def edit
 end
 ```
 
-Now that the `edit` view template will have access to the `@post` object, we need to refactor the form so that it auto fills the form fields with the data from the `post` record, this is done below:
+Now that the `edit` view template will have access to the `@post` object, we need to refactor the form so that it auto fills the form fields with the data from the `post` record. This is done below:
 
 ```ERB
 <% # app/views/posts/edit.html.erb %>
@@ -101,7 +101,7 @@ This will now populate the form, but if you tried to submit the form you may not
 <%= form_tag post_path(@post), method: "put" do %>
 ```
 
-By explicitly stating the route and method the form will now be routed to the `update` action. Before we try to implement the `update` action, let's first make sure the data is being routed properly. Enter the following code inside of the `update` method:
+By explicitly stating the route and method, the form will now be routed to the `update` action. Before we try to implement the `update` action, let's first make sure the data is being routed properly. Enter the following code inside of the `update` method:
 
 ```ruby
 def update
@@ -109,13 +109,13 @@ def update
 end
 ```
 
-The `raise` method will cause the application to pause and print out the `params` on an error page, you could also see the `params` if you called `puts params.inspect`, using `puts` would simply require you to track down the data in the rails server log.
+The `raise` method will cause the application to pause and print out the `params` on an error page. You could also see the `params` if you called `puts params.inspect`; using `puts` would simply require you to track down the data in the rails server log.
 
-If you open up the browser and navigate to an edit page, such as: `localhost:3000/post/5/edit` and change some elements in and form and submit it, it should take you to an error page that prints out the params from the form, such as the below image:
+If you open up the browser and navigate to an edit page, such as: `localhost:3000/post/5/edit`, and change some elements in the form and submit it, it should take you to an error page that prints out the params from the form, such as the below image:
 
 ![Raised Exception for Update Action](https://s3.amazonaws.com/flatiron-bucket/readme-lessons/update_raised_exception.png)
 
-As you can see, the parameters are being passed to the update action, with that in mind let's implement the functionality needed inside of the `update` action so that it will take the form data and update the specified record. Let's write some pseudo code for what the `update` action should do:
+As you can see, the parameters are being passed to the update action. With that in mind, let's implement the functionality needed inside of the `update` action so that it will take the form data and update the specified record. Let's write some pseudo code for what the `update` action should do:
 
 * Query the database for the `Post` record that matched the `:id` passed to the route
 
@@ -147,4 +147,5 @@ Now if you go to the edit page and make changes to the `title` or `description` 
 
 * How could we refactor this form code? You may notice that we have a form for the `new` and `edit` actions, is there a better way of doing this?
 
+<a href='https://learn.co/lessons/rails-edit-update-action-readme' data-visibility='hidden'>View this lesson on Learn.co</a>
 <a href='https://learn.co/lessons/rails-edit-update-action-readme' data-visibility='hidden'>View this lesson on Learn.co</a>
