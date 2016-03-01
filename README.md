@@ -20,13 +20,13 @@ In like fashion, the `edit` and `update` actions have a similar convention:
 To start off, let's draw a `get` route for our edit form, since the form will need to know which record is being edited this will need to be a dynamic route that accepts an `:id` as a parameter so it can be accessed by the controller:
 
 ```ruby
-get '/post/:id/edit', to: 'posts#edit'
+get '/posts/:id/edit', to: 'posts#edit'
 ```
 
 We still need to draw one additional route to handle the `update` action, this route will also need to be dynamic and accept an `:id` as a parameter so the `update` action will know what record is being altered. If you're curious on what HTTP verb should be selected, consider that we're sending data to the server, so we know it's not `GET`, and since we're not creating a new record it shouldn't be `POST`, so `PUT` should be the HTTP verb.
 
 ```ruby
-put 'post/:id', to: 'posts#update'
+put 'posts/:id', to: 'posts#update'
 ```
 
 On a side note, as a shortcut you could also simply add the `edit` and `update` actions to the `resources` call in the routes file and that would accomplish the same goal that these two lines do.
@@ -35,8 +35,8 @@ If you run `rake routes` you will see we have two new routes:
 
 ```
 Verb    URI Pattern                 Controller#Action
-GET     /post/:id/edit(.:format)    posts#edit
-PUT     /post/:id(.:format)         posts#update
+GET     /posts/:id/edit(.:format)    posts#edit
+PUT     /posts/:id(.:format)         posts#update
 ```
 
 With our routes in place, let's add in the controller actions:
@@ -53,7 +53,7 @@ And then create the edit view template `app/views/posts/edit.html.erb`
 
 Let's just copy and paste the form code from the `new` form:
 
-```ERB
+```erb
 <h3>Post Form</h3>
 
 <%= form_tag posts_path do %>
@@ -64,7 +64,7 @@ Let's just copy and paste the form code from the `new` form:
   <%= text_area_tag :description %><br>
 
   <%= hidden_field_tag :authenticity_token, form_authenticity_token %>
-  
+
   <%= submit_tag "Submit Post" %>
 <% end %>
 ```
@@ -79,7 +79,7 @@ end
 
 Now that the `edit` view template will have access to the `@post` object, we need to refactor the form so that it auto fills the form fields with the data from the `post` record. This is done below:
 
-```ERB
+```erb
 <% # app/views/posts/edit.html.erb %>
 
 <h3>Post Form</h3>
@@ -97,7 +97,7 @@ Now that the `edit` view template will have access to the `@post` object, we nee
 
 This will now populate the form, but if you tried to submit the form you may notice that it's redirecting to the show page and not changing the values. Notice how the `post_path` route helper method is used for the `show`, `update`, `edit`, and `delete` method? How can we let the app know that we want to use the `update` method in this case? We need to first make a change to the form so that it knows what route the data should be passed through as well as what HTTP verb needs to be called, make the following change to the `form_tag` line:
 
-```ERB
+```erb
 <%= form_tag post_path(@post), method: "put" do %>
 ```
 
