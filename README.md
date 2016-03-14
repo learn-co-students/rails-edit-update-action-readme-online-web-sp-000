@@ -84,7 +84,7 @@ Now that the `edit` view template will have access to the `@post` object, we nee
 
 <h3>Post Form</h3>
 
-<%= form_tag post_path(@post), method: "put" do %>
+<%= form_tag posts_path do %>
   <label>Post title:</label><br>
   <%= text_field_tag :title, @post.title %><br>
 
@@ -149,3 +149,5 @@ Now if you go to the edit page and make changes to the `title` or `description` 
 
 <p data-visibility='hidden'>View <a href='https://learn.co/lessons/rails-edit-update-action-readme' title='Edit/Update Action'>Edit/Update Action</a> on Learn.co and start learning to code for free.</p>
 <a href='https://learn.co/lessons/rails-edit-update-action-readme' data-visibility='hidden'>View this lesson on Learn.co</a>
+
+<p data-visibility='hidden'>View <a href='https://learn.co/lessons/rails-edit-update-action-readme'>Edit/Update Action</a> on Learn.co and start learning to code for free.</p>
