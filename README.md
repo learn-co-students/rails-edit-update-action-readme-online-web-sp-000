@@ -20,7 +20,7 @@ In like fashion, the `edit` and `update` actions have a similar convention:
 To start off, let's draw a `get` route for our edit form. Since the form will need to know which record is being edited, this will need to be a dynamic route that accepts an `:id` as a parameter that the controller can access:
 
 ```ruby
-get '/posts/:id/edit', to: 'posts#edit'
+get 'posts/:id/edit', to: 'posts#edit', as: :edit_post
 ```
 
 We still need to draw one additional route to handle the `update` action. This second route will also need to be dynamic, accepting the same `:id` as a parameter so that the action will know which record is being altered. If you're curious about which HTTP verb should be selected, consider the following: we're sending data to the server, so we know it's not `GET`, and since we're not creating a new record it shouldn't be `POST`. That's right- `PUT` should be the HTTP verb!
