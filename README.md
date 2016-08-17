@@ -17,29 +17,29 @@ In like fashion, the `edit` and `update` actions have a similar convention:
 
 ## Rendering the `edit` form
 
-To start off, let's draw a `get` route for our edit form, since the form will need to know which record is being edited this will need to be a dynamic route that accepts an `:id` as a parameter so it can be accessed by the controller:
+To start off, let's draw a `get` route for our edit form. Since the form will need to know which record is being edited, this will need to be a dynamic route that accepts an `:id` as a parameter that the controller can access:
 
 ```ruby
 get '/posts/:id/edit', to: 'posts#edit'
 ```
 
-We still need to draw one additional route to handle the `update` action, this route will also need to be dynamic and accept an `:id` as a parameter so the `update` action will know what record is being altered. If you're curious on what HTTP verb should be selected, consider that we're sending data to the server, so we know it's not `GET`, and since we're not creating a new record it shouldn't be `POST`, so `PUT` should be the HTTP verb.
+We still need to draw one additional route to handle the `update` action. This second route will also need to be dynamic, accepting the same `:id` as a parameter so that the action will know which record is being altered. If you're curious about which HTTP verb should be selected, consider the following: we're sending data to the server, so we know it's not `GET`, and since we're not creating a new record it shouldn't be `POST`. That's right- `PUT` should be the HTTP verb!
 
 ```ruby
 put 'posts/:id', to: 'posts#update'
 ```
 
-On a side note, as a shortcut you could also simply add the `edit` and `update` actions to the `resources` call in the routes file and that would accomplish the same goal that these two lines do.
+On a side note, as a shortcut you could also simply add the `edit` and `update` actions to the `resources` call in the routes file. That would accomplish the same goal that these two lines do.
 
-If you run `rake routes` you will see we have two new routes:
+If you run `rake routes`, you will see we have two new routes:
 
-```
-Verb    URI Pattern                 Controller#Action
+```bash
+Verb    URI Pattern                  Controller#Action
 GET     /posts/:id/edit(.:format)    posts#edit
 PUT     /posts/:id(.:format)         posts#update
 ```
 
-With our routes in place, let's add in the controller actions:
+With our routes in place, let's add in the controller actions...
 
 ```ruby
 def edit
@@ -49,13 +49,9 @@ def update
 end
 ```
 
-And then create the edit view template `app/views/posts/edit.html.erb`
-
-Let's just copy and paste the form code from the `new` form:
+...and then create the edit view template in `app/views/posts/edit.html.erb`. Let's just copy and paste the `new` form:
 
 ```erb
-<h3>Post Form</h3>
-
 <%= form_tag posts_path do %>
   <label>Post title:</label><br>
   <%= text_field_tag :title %><br>
@@ -63,13 +59,11 @@ Let's just copy and paste the form code from the `new` form:
   <label>Post Description</label><br>
   <%= text_area_tag :description %><br>
 
-  <%= hidden_field_tag :authenticity_token, form_authenticity_token %>
-
   <%= submit_tag "Submit Post" %>
 <% end %>
 ```
 
-If you open the browser and go to the `edit` page it will now display the form, but you may have noticed a pretty big flaw, it doesn't load the record's data into the form, there are a few tasks that we'll need to do in order to implement this behavior. First let's have our `edit` action store the `post` record in an instance variable:
+If you open the browser and go to the `edit` page, it will now display the form, but you may have noticed a pretty big flaw. It doesn't load the record's data into the form! There are a few things that we'll need to do in order to implement this behavior. First, let's have our `edit` action store the `post` record in an instance variable:
 
 ```ruby
 def edit
@@ -77,12 +71,10 @@ def edit
 end
 ```
 
-Now that the `edit` view template will have access to the `@post` object, we need to refactor the form so that it auto fills the form fields with the data from the `post` record. This is done below:
+Now that the `edit` view template will have access to the `Post` object (stored in `@post`), we need to refactor the form so that it auto-fills the form fields with the corresponding data from `@post`. This is done below:
 
 ```erb
 <% # app/views/posts/edit.html.erb %>
-
-<h3>Post Form</h3>
 
 <%= form_tag posts_path do %>
   <label>Post title:</label><br>
@@ -95,7 +87,9 @@ Now that the `edit` view template will have access to the `@post` object, we nee
 <% end %>
 ```
 
-This will now populate the form, but if you tried to submit the form you may notice that it's redirecting to the show page and not changing the values. Notice how the `post_path` route helper method is used for the `show`, `update`, `edit`, and `delete` method? How can we let the app know that we want to use the `update` method in this case? We need to first make a change to the form so that it knows what route the data should be passed through as well as what HTTP verb needs to be called, make the following change to the `form_tag` line:
+This will now populate the form correctly, but if you try submitting the form you may notice something strange. Instead of updating the appropriate `Post` object, submitting the form creates a whole new post! Oops, we forgot to change the target of the `form_tag` method from `posts_path` to `post_path(@post)`. The former is the equivalent of submitting a new post via the `/posts` action in Sinatra; the latter is the equivalent of updating an existing post via the `/posts/:id` action in Sinatra.
+
+But wait –– there's more! Unless we specify otherwise, a `form_tag` will default to sending an HTTP `POST` request. How can we let the app know that we want to send a `PUT` request instead here? We need to add an argument to the `form_tag` so that it knows not only which route the data should be passed through but also which HTTP verb to use. Make the following change to the `form_tag` line:
 
 ```erb
 <%= form_tag post_path(@post), method: "put" do %>
@@ -109,26 +103,26 @@ def update
 end
 ```
 
-The `raise` method will cause the application to pause and print out the `params` on an error page. You could also see the `params` if you called `puts params.inspect`; using `puts` would simply require you to track down the data in the rails server log.
+The `raise` method will cause the application to pause and print out the `params` on an error page. You could also see the `params` if you called `puts params.inspect`; using `puts` would simply require you to track down the data in the Rails server log.
 
-If you open up the browser and navigate to an edit page, such as: `localhost:3000/post/5/edit`, and change some elements in the form and submit it, it should take you to an error page that prints out the params from the form, such as the below image:
+If you open up the browser, navigate to an edit page (such as `localhost:3000/post/6/edit`), change some elements in the form, and submit it, it should take you to an error page that prints out the params from the form, such as in the below image:
 
 ![Raised Exception for Update Action](https://s3.amazonaws.com/flatiron-bucket/readme-lessons/update_raised_exception.png)
 
-As you can see, the parameters are being passed to the update action. With that in mind, let's implement the functionality needed inside of the `update` action so that it will take the form data and update the specified record. Let's write some pseudo code for what the `update` action should do:
+As you can see, the parameters are being passed to the `update` action. With that in mind, let's implement the functionality needed inside of the `update` action so that it will take the form data and update the specified record. Let's sketch out a basic flow for what the `update` action should do:
 
-* Query the database for the `Post` record that matched the `:id` passed to the route
+* Query the database for the `Post` record that matches the `:id` passed to the route.
 
-* Store the query in an instance variable
+* Store the query in an instance variable.
 
-* Update the values passed from the form (the update method here is the `update` method supplied from `ActiveRecord`, not the `update` method we're creating). **The update method takes a hash of the attributes for the model as its argument, e.g. `Post.find(1).update(title: "I'm Changed", description: "And here too!")**
+* Update the values passed from the form (the update method here is the `update` method supplied by Active Record, not the `update` method we're creating). **The update method takes a hash of the attributes for the model as its argument, e.g. `Post.find(1).update(title: "I'm Changed", description: "And here too!")**
 
-* Save the changes in the database
+* Save the changes in the database.
 
-* Redirect the user to the `show` page so they can see the updated record
+* Redirect the user to the `show` page so they can see the updated record.
 
 
-We'll take advantage of the `update` method so that we're not manually assigning each attribute:
+We'll take advantage of Active Record's `update` method so that we're not manually assigning each attribute:
 
 ```ruby
 def update
@@ -138,16 +132,13 @@ def update
 end
 ```
 
-Now if you go to the edit page and make changes to the `title` or `description` form elements you will see they are changed when the form is submitted, so the `edit` and `update` functions are working properly!
+Now if you go to the `edit` page and make changes to the `title` or `description` form elements, you will see they are changed when the form is submitted. The `edit` and `update` functions are working properly!
 
 
 ## Extra Credit
 
 * When only one form element is updated, such as the `title`, does the `description` also get updated?
 
-* How could we refactor this form code? You may notice that we have a form for the `new` and `edit` actions, is there a better way of doing this?
+* How could we refactor this form code? You may notice that we have a form for the `new` and `edit` actions. Is there a better way of doing this?
 
 <p data-visibility='hidden'>View <a href='https://learn.co/lessons/rails-edit-update-action-readme' title='Edit/Update Action'>Edit/Update Action</a> on Learn.co and start learning to code for free.</p>
-<a href='https://learn.co/lessons/rails-edit-update-action-readme' data-visibility='hidden'>View this lesson on Learn.co</a>
-
-<p data-visibility='hidden'>View <a href='https://learn.co/lessons/rails-edit-update-action-readme'>Edit/Update Action</a> on Learn.co and start learning to code for free.</p>
