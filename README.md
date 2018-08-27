@@ -105,7 +105,7 @@ end
 
 The `raise` method will cause the application to pause and print out the `params` on an error page. You could also see the `params` if you called `puts params.inspect`; using `puts` would simply require you to track down the data in the Rails server log.
 
-If you open up the browser, navigate to an edit page (such as `localhost:3000/post/6/edit`), change some elements in the form, and submit it, it should take you to an error page that prints out the params from the form, such as in the below image:
+If you open up the browser, navigate to an edit page (such as `localhost:3000/posts/6/edit`), change some elements in the form, and submit it, it should take you to an error page that prints out the params from the form, such as in the below image:
 
 ![Raised Exception for Update Action](https://s3.amazonaws.com/flatiron-bucket/readme-lessons/update_raised_exception.png)
 
@@ -142,3 +142,5 @@ Now if you go to the `edit` page and make changes to the `title` or `description
 * How could we refactor this form code? You may notice that we have a form for the `new` and `edit` actions. Is there a better way of doing this?
 
 <p data-visibility='hidden'>View <a href='https://learn.co/lessons/rails-edit-update-action-readme' title='Edit/Update Action'>Edit/Update Action</a> on Learn.co and start learning to code for free.</p>
+
+<p class='util--hide'>View <a href='https://learn.co/lessons/rails-edit-update-action-readme'>Edit/Update Action</a> on Learn.co and start learning to code for free.</p>
