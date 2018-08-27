@@ -20,4 +20,12 @@ class PostsController < ApplicationController
   end
 
   # add edit and update methods here
+
+  def edit
+    @post = Post.find(params[:id])
+  end
+
+  def update
+    raise params.inspect
+  end
 end
