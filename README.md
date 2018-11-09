@@ -85,7 +85,7 @@ Let's just copy and paste the `new` form:
   <label>Article Description</label><br>
   <%= text_area_tag :description %><br>
 
-  <%= submit_tag "Submit Post" %>
+  <%= submit_tag "Submit Article" %>
 <% end %>
 ```
 
@@ -109,13 +109,13 @@ with the corresponding data from `@article`. We'll also use a different form hel
 <% # app/views/articles/edit.html.erb %>
 
 <%= form_for @article do |f| %>
-  <%= f.label 'Post Title' %><br>
+  <%= f.label 'Article Title' %><br>
   <%= f.text_field :title %><br>
 
-  <%= f.label 'Post Description' %><br>
+  <%= f.label 'Article Description' %><br>
   <%= f.text_area :description %><br>
 
-  <%= f.submit "Submit Post" %>
+  <%= f.submit "Submit Article" %>
 <% end %>
 ```
 
