@@ -1,0 +1,3 @@
+<% @articles.each do |article| %>
+  <div><%= article.title %></div>
+<% end %>

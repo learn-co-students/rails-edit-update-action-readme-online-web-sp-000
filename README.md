@@ -25,7 +25,7 @@ need to know which record is being edited, this will need to be a dynamic route
 that accepts an `:id` as a parameter that the controller can access:
 
 ```ruby
-get 'posts/:id/edit', to: 'posts#edit', as: :edit_post
+get 'articles/:id/edit', to: 'articles#edit', as: :edit_article
 ```
 
 We still need to draw one additional route to handle the `update` action. This
@@ -37,7 +37,7 @@ creating a new record it shouldn't be `POST`. That's right- `PATCH` should be th
 HTTP verb!
 
 ```ruby
-patch 'posts/:id', to: 'posts#update'
+patch 'articles/:id', to: 'articles#update'
 ```
 
 **Note:** What about `PUT`? `PUT` will actually work just fine here, but briefly,
@@ -49,8 +49,8 @@ If you run `rake routes`, you will see we have some new routes:
 ```bash
 Prefix      Verb  URI Pattern               Controller#Action
                         ...
-edit_post   GET  /posts/:id/edit(.:format) posts#edit
-          PATCH  /posts/:id(.:format)      posts#update
+edit_article   GET  /articles/:id/edit(.:format) articles#edit
+          PATCH  /articles/:id(.:format)      articles#update
 ```
 
 On a side note, as a shortcut you could also simply add the `edit` and `update`
@@ -58,11 +58,11 @@ actions to the `resources` call in the routes file. That would accomplish the
 same goal that these two lines do:
 
 ```ruby
-  resources :posts, only: [:index, :show, :new, :create, :edit, :update]
+  resources :articles, only: [:index, :show, :new, :create, :edit, :update]
 ```
 
 This will give you the same routes along with a `PUT` route for
-`posts#update`.
+`articles#update`.
 
 With our routes in place, let's add in the controller actions...
 
@@ -74,57 +74,57 @@ def update
 end
 ```
 
-...and then create the edit view template in `app/views/posts/edit.html.erb`.
+...and then create the edit view template in `app/views/articles/edit.html.erb`.
 Let's just copy and paste the `new` form:
 
 ```erb
-<%= form_tag posts_path do %>
-  <label>Post title:</label><br>
+<%= form_tag articles_path do %>
+  <label>Article title:</label><br>
   <%= text_field_tag :title %><br>
 
-  <label>Post Description</label><br>
+  <label>Article Description</label><br>
   <%= text_area_tag :description %><br>
 
-  <%= submit_tag "Submit Post" %>
+  <%= submit_tag "Submit Article" %>
 <% end %>
 ```
 
 If you open the browser and go to the `edit` page, it will now display the form,
 but you may have noticed a pretty big flaw. It doesn't load the record's data
 into the form! There are a few things that we'll need to do in order to
-implement this behavior. First, let's have our `edit` action store the `post`
+implement this behavior. First, let's have our `edit` action store the `article`
 record in an instance variable:
 
 ```ruby
 def edit
-  @post = Post.find(params[:id])
+  @article = Article.find(params[:id])
 end
 ```
 
-Now that the `edit` view template will have access to the `Post` object (stored
-in `@post`), we need to refactor the form so that it auto-fills the form fields
-with the corresponding data from `@post`. We'll also use a different form helper, `form_for`, which will automatically set up the url where the form will be sent. These changes can be seen below:
+Now that the `edit` view template will have access to the `Article` object (stored
+in `@article`), we need to refactor the form so that it auto-fills the form fields
+with the corresponding data from `@article`. We'll also use a different form helper, `form_for`, which will automatically set up the url where the form will be sent. These changes can be seen below:
 
 ```erb
-<% # app/views/posts/edit.html.erb %>
+<% # app/views/articles/edit.html.erb %>
 
-<%= form_for @post do |f| %>
-  <%= f.label 'Post Title' %><br>
+<%= form_for @article do |f| %>
+  <%= f.label 'Article Title' %><br>
   <%= f.text_field :title %><br>
 
-  <%= f.label 'Post Description' %><br>
+  <%= f.label 'Article Description' %><br>
   <%= f.text_area :description %><br>
 
-  <%= f.submit "Submit Post" %>
+  <%= f.submit "Submit Article" %>
 <% end %>
 ```
 
 In this case, `form_for` takes care of some work for us. Using the object
-`@post` we've provided, `form_for` determines that `@post` is **not a _new_
-instance** of the `Post` class. Because of this, `form_for` knows to
+`@article` we've provided, `form_for` determines that `@article` is **not a _new_
+instance** of the `Article` class. Because of this, `form_for` knows to
 automatically send to the _update_ path.
 
-Since `@post` is not a new instance of `Post`, the inputs on this form, the text
+Since `@article` is not a new instance of `Article`, the inputs on this form, the text
 field and text area, will be populated with the corresponding object values.
 
 When submitted, the form will be routed to the `update` action. Before we
@@ -142,7 +142,7 @@ The `raise` method will cause the application to pause and print out the
 the Rails server log.
 
 If you open up the browser, navigate to an edit page (such as
-`localhost:3000/posts/2/edit`), change some elements in the form, and submit it,
+`localhost:3000/articles/2/edit`), change some elements in the form, and submit it,
 it should take you to an error page that prints out the params from the form,
 such as in the below image:
 
@@ -153,14 +153,14 @@ that in mind, let's implement the functionality needed inside of the `update`
 action so that it will take the form data and update the specified record. Let's
 sketch out a basic flow for what the `update` action should do:
 
-- Query the database for the `Post` record that matches the `:id` passed to the route.
+- Query the database for the `Article` record that matches the `:id` passed to the route.
 
 - Store the query in an instance variable.
 
 - Update the values passed from the form (the update method here is the `update`
   method supplied by Active Record, not the `update` method we're creating). **The
   update method takes a hash of the attributes for the model as its argument, e.g.
-  `Post.find(1).update(title: "I'm Changed", description: "And here too!")**
+  `Article.find(1).update(title: "I'm Changed", description: "And here too!")**
 
 - Save the changes in the database.
 
@@ -171,9 +171,9 @@ manually assigning each attribute:
 
 ```ruby
 def update
-  @post = Post.find(params[:id])
-  @post.update(title: params[:title], description: params[:description])
-  redirect_to post_path(@post)
+  @article = Article.find(params[:id])
+  @article.update(title: params[:title], description: params[:description])
+  redirect_to article_path(@article)
 end
 ```
 
