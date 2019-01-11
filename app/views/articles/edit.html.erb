@@ -1,0 +1,22 @@
+<!--<%= form_tag article_path(@article), method: "put" do %>-->
+<!--  <label>Article Title:</label><br>-->
+<!--  <%= text_field_tag :title, @article.title %><br>-->
+
+<!--  <label>Article Description</label><br>-->
+<!--  <%= text_area_tag :description, @article.description %><br>-->
+
+<!--  <%= submit_tag "Submit Post" %>-->
+<!--<% end %>-->
+
+
+<h3>Article Form</h3>
+ 
+<%= form_for(@article) do |f| %>
+  <label>Article Title:</label><br>
+  <%= f.text_field :title %><br>
+ 
+  <label>Article Description</label><br>
+  <%= f.text_area :description %><br>
+  
+  <%= f.submit "Submit Article" %>
+<% end %>
