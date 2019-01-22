@@ -1,0 +1,10 @@
+<%# form_for determines that @article is not a new instance of the Article class  %>
+<%= form_for @article do |f| %>
+  <%= f.label 'Article Title' %><br>
+  <%= f.text_field :title %><br>
+
+  <%= f.label 'Article Description' %>
+  <%= f.text_area :description %><br>
+
+  <%= f.submit "Submit Article" %>
+<% end %>
