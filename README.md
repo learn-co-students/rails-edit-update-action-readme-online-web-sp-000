@@ -146,7 +146,7 @@ If you open up the browser, navigate to an edit page (such as
 it should take you to an error page that prints out the params from the form,
 such as in the below image:
 
-![Raised Exception for Update Action](https://s3.amazonaws.com/flatiron-bucket/readme-lessons/update_raised_exception.png)
+![Raised Exception for Update Action](https://i.imgur.com/38MhjpO.png)
 
 As you can see, the parameters are being passed to the `update` action. With
 that in mind, let's implement the functionality needed inside of the `update`
