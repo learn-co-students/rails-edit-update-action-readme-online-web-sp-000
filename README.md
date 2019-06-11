@@ -172,7 +172,7 @@ manually assigning each attribute:
 ```ruby
 def update
   @article = Article.find(params[:id])
-  @article.update(title: params[:title], description: params[:description])
+  @article.update(title: params[:post][:title], description: params[:post][:description])
   redirect_to article_path(@article)
 end
 ```
