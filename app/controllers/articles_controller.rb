@@ -1,10 +1,12 @@
 class ArticlesController < ApplicationController
+  before_action :set_coupon, only: [:show, :edit, :update]
+
   def index
     @articles = Article.all
   end
 
   def show
-    @article = Article.find(params[:id])
+  
   end
 
   def new
@@ -19,5 +21,25 @@ class ArticlesController < ApplicationController
     redirect_to article_path(@article)
   end
 
+  def edit
+    
+  end
+
+  def update
+    @article.update(article_params)
+    redirect_to @article
+  end
+
+
   # add edit and update methods here
+  private
+    def set_coupon
+      @article = Article.find(params[:id])
+    end
+
+    def article_params
+      params.require(:article).permit(:title, :description)
+    end
+
+
 end
