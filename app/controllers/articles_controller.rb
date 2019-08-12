@@ -1,12 +1,12 @@
 class ArticlesController < ApplicationController
-  
-  
+  before_action :set_coupon, only: [:show, :edit, :update]
+
   def index
     @articles = Article.all
   end
 
   def show
-    @article = Article.find(params[:id])
+  
   end
 
   def new
@@ -23,4 +23,8 @@ class ArticlesController < ApplicationController
 
 
   # add edit and update methods here
+  private
+    def set_coupon
+      @article = Article.find(params[:id])
+    end
 end
