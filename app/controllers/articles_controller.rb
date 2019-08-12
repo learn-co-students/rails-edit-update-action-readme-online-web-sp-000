@@ -1,4 +1,6 @@
 class ArticlesController < ApplicationController
+  
+  
   def index
     @articles = Article.all
   end
@@ -18,6 +20,7 @@ class ArticlesController < ApplicationController
     @article.save
     redirect_to article_path(@article)
   end
+
 
   # add edit and update methods here
 end
