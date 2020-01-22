@@ -1,4 +1,7 @@
 class ArticlesController < ApplicationController
+
+  layout "form", only: [:new, :edit]
+
   def index
     @articles = Article.all
   end

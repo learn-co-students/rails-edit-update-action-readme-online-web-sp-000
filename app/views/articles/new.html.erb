@@ -1,9 +1,11 @@
+<!-- The code in this form is unnecessary as the new method uses the form layout-->
+
 <%= form_tag articles_path do %>
-  <label>Article title:</label><br>
-  <%= text_field_tag :title %><br>
-
-  <label>Article Description</label><br>
-  <%= text_area_tag :description %><br>
-
-  <%= submit_tag "Submit Article" %>
-<% end %>
+    <label>Article title:</label><br>
+    <%= text_field_tag :title %><br>
+  
+    <label>Article Description</label><br>
+    <%= text_area_tag :description %><br>
+  
+    <%= submit_tag "Submit Article" %>
+  <% end %>
