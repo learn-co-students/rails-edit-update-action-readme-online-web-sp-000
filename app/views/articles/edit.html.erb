@@ -1,0 +1,17 @@
+<!--<%= form_tag articles_path do %>just this doesn't load the record's data into the form 
+We'll also use a different form helper, form_for,
+ which will automatically set up the url where the form will be sent.--> 
+<%= form_for @article do |f| %><!--form_for determines that @article is not a new instance of the Article class.
+form_for knows to automatically send to the update path when form is submitted
+Since @article is not a new instance of Article, the inputs on this form, the text field and text area,
+ will be populated with the corresponding object values.
+  <label>Article title:</label><br>-->
+  <%= f.label 'Article Title' %><br>
+  <%= text_field_tag :title %><br>
+ 
+  <!--<label>Article Description</label><br>-->
+  <%= f.label 'Article Description' %><br>
+  <%= text_area_tag :description %><br>
+ 
+  <%= submit_tag "Submit Article" %>
+<% end %>
