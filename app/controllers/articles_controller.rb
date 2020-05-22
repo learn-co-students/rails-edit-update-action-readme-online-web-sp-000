@@ -5,7 +5,7 @@ class ArticlesController < ApplicationController
   end
 
   def show
-    @article = Article.find(params[:id])
+    @article = Article.find(article_params[:id])
   end
 
   def new
@@ -28,6 +28,7 @@ class ArticlesController < ApplicationController
   def update 
     @article = Article.find(article_params[:id])
     @article.update(article_params)
+    @article.save 
     redirect_to article_path(@article)
   end 
   
