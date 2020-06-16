@@ -1,6 +1,6 @@
 # Edit/Update Action
 
-## Rails Controller Conventions
+## Rails Controller Conventions yo
 
 Now that you know how to implement a create action, the next logical step will
 be to integrate an edit/update action. As you may have noticed, there is a trend
