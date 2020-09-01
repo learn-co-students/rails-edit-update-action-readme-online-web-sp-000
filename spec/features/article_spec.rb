@@ -26,7 +26,7 @@ describe 'form' do
     visit new_article_path
 
     fill_in 'title', with: "My article title"
-    fill_in 'description', with: "My article description"
+    fill_in 'description', with: "My article desc"
 
     click_on "Submit Article"
 
