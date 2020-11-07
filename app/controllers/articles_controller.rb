@@ -20,7 +20,7 @@ class ArticlesController < ApplicationController
   end
 
   def edit
-    @artile = Article.find(params[:id])
+    @article = Article.find(params[:id])
   end
 
   def update
@@ -29,5 +29,4 @@ class ArticlesController < ApplicationController
     redirect_to article_path(@article)
   end
 
-  # add edit and update methods here
 end
