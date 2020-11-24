@@ -19,5 +19,20 @@ class ArticlesController < ApplicationController
     redirect_to article_path(@article)
   end
 
-  # add edit and update methods here
+  def edit
+    @article = Article.find(params[:id])
+    # if you run 'rails routes', you'll see that the edit URI contains :id (which you can access in the params)
+
+
+  end
+
+  def update
+    # raise params.inspect (prints params on an error page)
+    @article = Article.find(params[:id])
+    #@article.update(title: params[:article][:title], description: params[:article][:description])
+    params[:article].permit! # why was params[:article] a forbidden attribute?
+    @article.update(params[:article])
+
+    redirect_to article_path(@article)
+  end
 end
