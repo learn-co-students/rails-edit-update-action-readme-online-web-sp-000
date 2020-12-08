@@ -1,9 +1,9 @@
-<%= form_tag articles_path do %>
-  <label>Article title:</label><br>
-  <%= text_field_tag :title %><br>
+<%= form_for @article do |f| %>
+  <%= f.label 'Article Title' %><br>
+  <%= f.text_field :title %><br>
  
-  <label>Article Description</label><br>
-  <%= text_area_tag :description %><br>
+  <%= f.label 'Article Description' %><br>
+  <%= f.text_area :description %><br>
  
-  <%= submit_tag "Submit Article" %>
+  <%= f.submit "Submit Article" %>
 <% end %>
