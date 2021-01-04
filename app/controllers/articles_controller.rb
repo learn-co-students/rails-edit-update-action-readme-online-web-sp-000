@@ -12,7 +12,6 @@ class ArticlesController < ApplicationController
   end
 
   def create
-    raise params.inspect
     @article = Article.new(title: params[:title], description: params[:description])
     if @article.save
       redirect_to article_path(@article)
@@ -27,7 +26,6 @@ class ArticlesController < ApplicationController
   end
 
   def update
-    raise params.inspect
     @article = Article.find(params[:id])
     if @article.update(:title => params[:article][:title], :description => params[:article][:description])
       redirect_to article_path(@article)
@@ -35,4 +33,8 @@ class ArticlesController < ApplicationController
       render :edit
     end
   end
+
+  private
+    def article_params
+
 end
