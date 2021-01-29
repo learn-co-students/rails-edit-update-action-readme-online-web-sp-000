@@ -1,0 +1,22 @@
+<%= form_tag articles_path do %>
+BECOMES
+<%= form_for @article do |f| %>
+
+<label>Article Title:</label><br>
+<%= text_field_tag :title %><br>
+BECOMES
+<%= f.label 'Article Title:' %><br>
+<%= f.text_field :title %><br>
+
+<label>Article Description:</label><br>
+<%= text_field_tag :description %><br>
+BECOMES
+<%= f.label 'Article Description:' %><br>
+<%= f.text_field :description %><br>
+
+<%= submit_tag "Submit Article" %>
+BECOMES
+<%= f.submit "Submit Article" %>
+
+
+<% end %>
