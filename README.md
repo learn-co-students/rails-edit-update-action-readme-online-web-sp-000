@@ -42,7 +42,7 @@ patch 'articles/:id', to: 'articles#update'
 
 **Note:** What about `PUT`? `PUT` will actually work just fine here, but briefly,
 `PUT` is meant to be used when replacing a whole resource. `PATCH`, on the other
-hand, is for used for sending a set of changes to a resource.
+hand, is used for sending a set of changes to a resource.
 
 If you run `rake routes`, you will see we have some new routes:
 
